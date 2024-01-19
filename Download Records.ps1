@@ -86,7 +86,6 @@ $configArray = @(
     #}
 ) 
 
-
 function Log($Text) {
 
     $Text = "$(Get-Date -Format g) $Text";
@@ -187,17 +186,18 @@ function GetRec($EC, $R) {
     Log("Processing Record: $($R.id)")
 
     if ($EC.exportJSON) {
-        if (Test-Path $EC.exportJSONPath) {            
-            Log("Export JSON")
-            $httpString = "https://platform.smapone.com/backend/intern/Smaps/$($R.smapId)/Versions/$($R.version)/Data/$($R.id).json?markAsExported=false&useDefault=false&accesstoken=$($EC.token)"
-            $jsonName = $ExecutionContext.InvokeCommand.ExpandString($EC.exportJSONName) -replace "`n", "" -replace "`r", ""; 
-            doWebRequestDownloadFile -uriString $httpString -path $EC.exportJSONPath -fileName $jsonName
-        } else {
-            Log("Pfad nicht vorhanden: $($EC.exportJSONPath)")
+        $exportJSONPath = $ExecutionContext.InvokeCommand.ExpandString($EC.exportJSONPath);
+        if (!(Test-Path $exportJSONPath)) {
+            Log("Create Folder: $($exportJSONPath)")
+            New-Item -ItemType Directory -Force -Path $exportJSONPath | Out-Null
         }
+        Log("Export JSON")
+        $httpString = "https://platform.smapone.com/backend/intern/Smaps/$($R.smapId)/Versions/$($R.version)/Data/$($R.id).json?markAsExported=false&useDefault=false&accesstoken=$($EC.token)"
+        $jsonName = $ExecutionContext.InvokeCommand.ExpandString($EC.exportJSONName) -replace "`n", "" -replace "`r", ""; 
+        doWebRequestDownloadFile -uriString $httpString -path $EC.exportJSONPath -fileName $jsonName
+        
     }
 
-    
     if ($EC.exportPDF) {
         $exportPDFPath = $ExecutionContext.InvokeCommand.ExpandString($EC.exportPDFPath);
         if (!(Test-Path $exportPDFPath)) {
