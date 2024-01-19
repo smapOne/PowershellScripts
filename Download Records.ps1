@@ -232,7 +232,7 @@ function GetRec($EC, $R) {
             $httpString = "https://platform.smapone.com/backend/intern/Smaps/$($R.smapId)/Versions/$($R.version)/Data/$($R.id)/Files/$($jsonRec.fileId)?accesstoken=$($EC.token)"
             $assetName = $jsonRec.fileName;
             if (!($assetName.StartsWith("Signature_"))) {
-                Log("Write File: $($exportAssetsPath)\$($assetName)")
+                # Log("Write File: $($exportAssetsPath)\$($assetName)")
                 doWebRequestDownloadFile -uriString $httpString -path $exportAssetsPath -fileName $assetName                
             }
         }
