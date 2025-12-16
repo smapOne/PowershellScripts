@@ -114,9 +114,9 @@ function doWebRequest ($uriString) {
     
     try {
         if (($Proxy -ne "") -and ($Proxy -ne $null)) {
-            $Response = Invoke-WebRequest -Proxy $Proxy $uriString         
+            $Response = Invoke-WebRequest -UseBasicParsing -Proxy $Proxy $uriString
         } else {
-            $Response = Invoke-WebRequest $uriString        
+            $Response = Invoke-WebRequest -UseBasicParsing $uriString
         }
         return $Response;
     } catch {
@@ -137,7 +137,7 @@ function doWebRequest ($uriString) {
 function doWebRequestDelete ($uriString) {
     
     try {
-        $Response = Invoke-WebRequest -Method Delete $uriString        
+        $Response = Invoke-WebRequest -UseBasicParsing -Method Delete $uriString
         return $Response;
     } catch {
         if ($_.Exception.Response.StatusCode -eq 429) {
@@ -163,9 +163,9 @@ function doWebRequestDownloadFile($uriString, $path, $fileName) {
 
     try {                  
         if (($Proxy -ne "") -and ($Proxy -ne $null)) {
-            $Response = Invoke-WebRequest $uriString -Proxy $Proxy -OutFile "$($path)\$($fileName)"
+            $Response = Invoke-WebRequest -UseBasicParsing $uriString -Proxy $Proxy -OutFile "$($path)\$($fileName)"
         } else {
-            $Response = Invoke-WebRequest $uriString -OutFile "$($path)\$($fileName)"
+            $Response = Invoke-WebRequest -UseBasicParsing $uriString -OutFile "$($path)\$($fileName)"
         }
     } catch {
         if ($_.Exception.Response.StatusCode -eq 429) {
