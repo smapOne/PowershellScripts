@@ -141,7 +141,7 @@ function doWebRequestDelete ($uriString) {
         return $Response;
     } catch {
         if ($_.Exception.Response.StatusCode -eq 429) {
-            $waitSecs = $_.Exception.Response.Headers["Retry-After"];            
+            $waitSecs = if ($_.Exception.Response.Headers["Retry-After"]) { $_.Exception.Response.Headers["Retry-After"] } else { 60 } 
             Log("HTTP Status 429 - wait $waitSecs Seconds");
             Start-Sleep -s $waitSecs;
             return doWebRequest -uriString $uriString;
@@ -169,7 +169,7 @@ function doWebRequestDownloadFile($uriString, $path, $fileName) {
         }
     } catch {
         if ($_.Exception.Response.StatusCode -eq 429) {
-            $waitSecs = $_.Exception.Response.Headers["Retry-After"];
+            $waitSecs = if ($_.Exception.Response.Headers["Retry-After"]) { $_.Exception.Response.Headers["Retry-After"] } else { 60 } 
             Log("wait $waitSecs Seconds");
             Start-Sleep -s $waitSecs;
             doWebRequestDownloadFile -uriString $uriString -path $path -fileName $fileName
@@ -281,3 +281,4 @@ function StartRoutine($Config) {
 }
 
 StartRoutine($configArray)
+
