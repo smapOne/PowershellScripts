@@ -1,5 +1,5 @@
 # Created By: Michael Rath und Sebastian Trebbin, smapOne AG
-# Version 1.6
+# Version 1.7
 #
 # Änderungen:
 # * Erläuterung für die Konfiguration eingepflegt
